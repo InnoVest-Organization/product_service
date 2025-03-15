@@ -1,9 +1,12 @@
 package com.backend.productservice.controller;
 
 import com.backend.productservice.dto.InventionRequest;
+import com.backend.productservice.dto.BidTimeUpdateRequest;
 import com.backend.productservice.entity.Invention;
 import com.backend.productservice.service.InventionService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,5 +28,20 @@ public class InventionController {
     public ResponseEntity<Invention> getInventionByInnovationId(@PathVariable("innovationId") Long innovationId) {
         Invention invention = inventionService.getInventionByInnovationId(innovationId);
         return ResponseEntity.ok(invention);
+    }
+
+    @PutMapping("/updateBidTimes")
+    public ResponseEntity<String> updateBidTimes(@RequestBody BidTimeUpdateRequest request) {
+        boolean isUpdated = inventionService.updateBidTimes(
+                request.getInventionId(),
+                request.getBidStartTime(),
+                request.getBidEndTime(),
+                request.getBidStartDate());
+
+        if (isUpdated) {
+            return ResponseEntity.ok("Bid times updated successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invention ID not found!");
+        }
     }
 }

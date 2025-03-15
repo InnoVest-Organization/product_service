@@ -1,10 +1,15 @@
 package com.backend.productservice.service;
 
 import com.backend.productservice.dto.InventionRequest;
+import com.backend.productservice.dto.BidTimeUpdateRequest;
 import com.backend.productservice.entity.Invention;
 import com.backend.productservice.repository.InventionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +45,22 @@ public class InventionService {
     public Invention getInventionByInnovationId(Long innovationId) {
         return inventionRepository.findByInventionId(innovationId)
                 .orElseThrow(() -> new RuntimeException("Invention not found with innovationId: " + innovationId));
+    }
+
+    public boolean updateBidTimes(Long inventionId, LocalTime bidStartTime, LocalTime bidEndTime,
+            LocalDate bidStartDate) {
+        Optional<Invention> inventionOpt = inventionRepository.findById(inventionId);
+
+        if (inventionOpt.isPresent()) {
+            Invention invention = inventionOpt.get();
+            invention.setBidStartTime(bidStartTime);
+            invention.setBidEndTime(bidEndTime);
+            invention.setBidStartDate(bidStartDate);
+            inventionRepository.save(invention);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
