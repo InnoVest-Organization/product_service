@@ -4,6 +4,7 @@ import com.backend.productservice.entity.ModeOfSale;
 import com.backend.productservice.entity.PaymentPackage;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -24,4 +25,7 @@ public class InventionRequest {
     private LocalTime bidStartTime; // Changed from Time to LocalTime
     private LocalTime bidEndTime; // Changed from Time to LocalTime
     private List<String> aoi; // Changed from String to List<String>
+    private LocalDate bidStartDate;
+    private Boolean isLive;
+    private Boolean isPaid;
 }

@@ -20,4 +20,10 @@ public class InventionController {
         System.out.println("Saved invention: " + savedInvention);
         return ResponseEntity.ok(savedInvention);
     }
+
+    @GetMapping("/{innovationId}")
+    public ResponseEntity<Invention> getInventionByInnovationId(@PathVariable("innovationId") Long innovationId) {
+        Invention invention = inventionService.getInventionByInnovationId(innovationId);
+        return ResponseEntity.ok(invention);
+    }
 }

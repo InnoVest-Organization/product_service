@@ -20,7 +20,7 @@ public class InventionService {
                 .productVideo(request.getProductVideo())
                 .productDescription(request.getProductDescription())
                 .capital(request.getCapital())
-                .salesData(request.getSalesData())  // Directly setting List<Integer>
+                .salesData(request.getSalesData()) // Directly setting List<Integer>
                 .modeOfSale(request.getModeOfSale())
                 .costDescription(request.getCostDescription())
                 .expectedCapital(request.getExpectedCapital())
@@ -28,9 +28,18 @@ public class InventionService {
                 .paymentPackage(request.getPaymentPackage())
                 .bidStartTime(request.getBidStartTime())
                 .bidEndTime(request.getBidEndTime())
-                .aoi(request.getAoi())  // Directly setting List<String>
+                .aoi(request.getAoi())
+                .bidStartDate(request.getBidStartDate())
+                .isLive(request.getIsLive())
+                .isPaid(request.getIsPaid())
                 .build();
 
         return inventionRepository.save(invention);
     }
+
+    public Invention getInventionByInnovationId(Long innovationId) {
+        return inventionRepository.findByInventionId(innovationId)
+                .orElseThrow(() -> new RuntimeException("Invention not found with innovationId: " + innovationId));
+    }
+
 }
