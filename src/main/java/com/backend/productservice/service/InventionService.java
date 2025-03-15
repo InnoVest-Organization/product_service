@@ -10,27 +10,27 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class InventionService {
 
-	private final InventionRepository inventionRepository;
+    private final InventionRepository inventionRepository;
 
-	public Invention saveInvention(InventionRequest request) {
-		Invention invention = Invention.builder()
-				.inventionId(request.getInventionId())
-				.inventorId(request.getInventorId())
-				.investorId(request.getInvestorId())
-				.productVideo(request.getProductVideo())
-				.productDescription(request.getProductDescription())
-				.capital(request.getCapital())
-				.salesData(request.getSalesData())
-				.modeOfSale(request.getModeOfSale())
-				.costDescription(request.getCostDescription())
-				.expectedCapital(request.getExpectedCapital())
-				.breakupRevenue(request.getBreakupRevenue())
-				.paymentPackage(request.getPaymentPackage())
-				.bidStartTime(request.getBidStartTime())
-				.bidEndTime(request.getBidEndTime())
-				.aoi(request.getAoi())
-				.build();
+    public Invention saveInvention(InventionRequest request) {
+        Invention invention = Invention.builder()
+                .inventionId(request.getInventionId())
+                .inventorId(request.getInventorId())
+                .investorId(request.getInvestorId())
+                .productVideo(request.getProductVideo())
+                .productDescription(request.getProductDescription())
+                .capital(request.getCapital())
+                .salesData(request.getSalesData())  // Directly setting List<Integer>
+                .modeOfSale(request.getModeOfSale())
+                .costDescription(request.getCostDescription())
+                .expectedCapital(request.getExpectedCapital())
+                .breakupRevenue(request.getBreakupRevenue())
+                .paymentPackage(request.getPaymentPackage())
+                .bidStartTime(request.getBidStartTime())
+                .bidEndTime(request.getBidEndTime())
+                .aoi(request.getAoi())  // Directly setting List<String>
+                .build();
 
-		return inventionRepository.save(invention);
-	}
+        return inventionRepository.save(invention);
+    }
 }

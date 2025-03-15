@@ -4,7 +4,8 @@ import com.backend.productservice.entity.ModeOfSale;
 import com.backend.productservice.entity.PaymentPackage;
 import lombok.Data;
 
-import java.sql.Time;
+import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class InventionRequest {
@@ -14,13 +15,13 @@ public class InventionRequest {
     private String productVideo;
     private String productDescription;
     private Integer capital;
-    private String salesData;
+    private List<Integer> salesData; // Changed from String to List<Integer>
     private ModeOfSale modeOfSale;
     private String costDescription;
     private Integer expectedCapital;
     private Integer breakupRevenue;
     private PaymentPackage paymentPackage;
-    private Time bidStartTime;
-    private Time bidEndTime;
-    private String aoi;
+    private LocalTime bidStartTime; // Changed from Time to LocalTime
+    private LocalTime bidEndTime; // Changed from Time to LocalTime
+    private List<String> aoi; // Changed from String to List<String>
 }
