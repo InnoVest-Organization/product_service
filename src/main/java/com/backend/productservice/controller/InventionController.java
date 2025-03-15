@@ -1,4 +1,4 @@
-package com.backend.productservice.service;
+package com.backend.productservice.controller;
 
 import com.backend.productservice.dto.InventionRequest;
 import com.backend.productservice.entity.Invention;
