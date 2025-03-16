@@ -69,7 +69,8 @@ public class InventionService {
                         invention.getAoi(),
                         invention.getPaymentPackage().name());
                 System.out.println(investorEmails);
-                externalApiService.sendNotifications(investorEmails);
+                String res = externalApiService.sendNotifications(investorEmails);
+                System.out.println(res);
             } catch (Exception e) {
                 log.error("Error while processing external service calls", e);
 

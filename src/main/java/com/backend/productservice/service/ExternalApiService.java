@@ -30,8 +30,9 @@ public class ExternalApiService {
         return response.getBody();
     }
 
-    public void sendNotifications(List<String> emails) {
+    public String sendNotifications(List<String> emails) {
         String notificationServiceUrl = "http://localhost:5005/api/notifications";
-        restTemplate.postForEntity(notificationServiceUrl, emails, Void.class);
+        ResponseEntity<String> res = restTemplate.postForEntity(notificationServiceUrl, emails, String.class);
+        return res.getBody();
     }
 }
