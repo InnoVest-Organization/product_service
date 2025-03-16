@@ -4,18 +4,23 @@ import com.backend.productservice.dto.InventionRequest;
 import com.backend.productservice.dto.BidTimeUpdateRequest;
 import com.backend.productservice.entity.Invention;
 import com.backend.productservice.repository.InventionRepository;
+import com.backend.productservice.service.ExternalApiService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InventionService {
 
     private final InventionRepository inventionRepository;
+    private final ExternalApiService externalApiService;
 
     public Invention saveInvention(InventionRequest request) {
         Invention invention = Invention.builder()
@@ -25,7 +30,7 @@ public class InventionService {
                 .productVideo(request.getProductVideo())
                 .productDescription(request.getProductDescription())
                 .capital(request.getCapital())
-                .salesData(request.getSalesData()) // Directly setting List<Integer>
+                .salesData(request.getSalesData())
                 .modeOfSale(request.getModeOfSale())
                 .costDescription(request.getCostDescription())
                 .expectedCapital(request.getExpectedCapital())
@@ -57,6 +62,19 @@ public class InventionService {
             invention.setBidEndTime(bidEndTime);
             invention.setBidStartDate(bidStartDate);
             inventionRepository.save(invention);
+
+            try {
+                List<String> investorEmails = externalApiService.getInvestorEmails(
+                        inventionId,
+                        invention.getAoi(),
+                        invention.getPaymentPackage().name());
+                System.out.println(investorEmails);
+                externalApiService.sendNotifications(investorEmails);
+            } catch (Exception e) {
+                log.error("Error while processing external service calls", e);
+
+            }
+
             return true;
         } else {
             return false;
