@@ -1,10 +1,11 @@
 package com.backend.productservice.service;
 
 import com.backend.productservice.dto.InventionRequest;
-import com.backend.productservice.dto.BidTimeUpdateRequest;
+
+import com.backend.productservice.dto.InnovatorDetailsResponse;
 import com.backend.productservice.entity.Invention;
 import com.backend.productservice.repository.InventionRepository;
-import com.backend.productservice.service.ExternalApiService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,17 @@ public class InventionService {
         } else {
             return false;
         }
+    }
+
+    public InnovatorDetailsResponse getInnovatorDetails(Long inventionId) {
+        Invention invention = inventionRepository.findById(inventionId)
+                .orElseThrow(() -> new RuntimeException("Invention not found with id: " + inventionId));
+
+        String innovatorEmail = externalApiService.getInnovatorEmail(invention.getInventorId());
+
+        return new InnovatorDetailsResponse(
+                innovatorEmail,
+                invention.getPaymentPackage().name());
     }
 
 }

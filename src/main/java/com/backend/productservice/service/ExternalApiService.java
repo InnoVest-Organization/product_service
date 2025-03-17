@@ -2,6 +2,7 @@ package com.backend.productservice.service;
 
 import com.backend.productservice.dto.InvestorMatchRequest;
 import com.backend.productservice.dto.NotificationRequest;
+import com.backend.productservice.dto.InnovatorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -41,5 +42,13 @@ public class ExternalApiService {
                 bidStartTime, bidEndTime);
         ResponseEntity<String> res = restTemplate.postForEntity(notificationServiceUrl, request, String.class);
         return res.getBody();
+    }
+
+    public String getInnovatorEmail(Long innovatorId) {
+        String innovatorServiceUrl = "http://localhost:5001/api/innovator/" + innovatorId;
+        ResponseEntity<InnovatorResponse> response = restTemplate.getForEntity(
+                innovatorServiceUrl,
+                InnovatorResponse.class);
+        return response.getBody().getEmail();
     }
 }

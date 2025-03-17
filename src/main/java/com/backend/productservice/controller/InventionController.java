@@ -2,6 +2,7 @@ package com.backend.productservice.controller;
 
 import com.backend.productservice.dto.InventionRequest;
 import com.backend.productservice.dto.BidTimeUpdateRequest;
+import com.backend.productservice.dto.InnovatorDetailsResponse;
 import com.backend.productservice.entity.Invention;
 import com.backend.productservice.service.InventionService;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,10 @@ public class InventionController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invention ID not found!");
         }
+    }
+
+    @GetMapping("/innovator-details/{inventionId}")
+    public ResponseEntity<InnovatorDetailsResponse> getInnovatorDetails(@PathVariable Long inventionId) {
+        return ResponseEntity.ok(inventionService.getInnovatorDetails(inventionId));
     }
 }
