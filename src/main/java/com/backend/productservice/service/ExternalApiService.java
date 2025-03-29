@@ -20,7 +20,7 @@ public class ExternalApiService {
     private final RestTemplate restTemplate;
 
     public List<String> getInvestorEmails(Long inventionId, List<String> aoi, String paymentPackage) {
-        String investorServiceUrl = "http://localhost:6000/api/investors/match";
+        String investorServiceUrl = "http://localhost:5006/api/investors/match";
 
         InvestorMatchRequest request = new InvestorMatchRequest(inventionId, aoi, paymentPackage);
 
@@ -36,7 +36,7 @@ public class ExternalApiService {
 
     public String sendNotifications(List<String> emails, Long inventionId, String productDescription,
             LocalDate bidStartDate, LocalTime bidStartTime, LocalTime bidEndTime) {
-        String notificationServiceUrl = "http://localhost:6000/api/notifications/newbid";
+        String notificationServiceUrl = "http://localhost:5005/api/notifications/newbid";
 
         NotificationRequest request = new NotificationRequest(emails, inventionId, productDescription, bidStartDate,
                 bidStartTime, bidEndTime);
@@ -45,7 +45,7 @@ public class ExternalApiService {
     }
 
     public String getInnovatorEmail(Long innovatorId) {
-        String innovatorServiceUrl = "http://localhost:6000/api/innovator/" + innovatorId;
+        String innovatorServiceUrl = "http://localhost:5001/api/innovator/" + innovatorId;
         ResponseEntity<InnovatorResponse> response = restTemplate.getForEntity(
                 innovatorServiceUrl,
                 InnovatorResponse.class);
