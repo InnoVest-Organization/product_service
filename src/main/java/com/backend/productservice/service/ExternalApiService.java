@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.core.ParameterizedTypeReference;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -19,6 +21,7 @@ import java.time.LocalTime;
 public class ExternalApiService {
     private final RestTemplate restTemplate;
 
+    @CircuitBreaker(name = "invention", fallbackMethod = "getInvestorEmailsFallback")
     public List<String> getInvestorEmails(Long inventionId, List<String> aoi, String paymentPackage) {
         String investorServiceUrl = "http://localhost:5006/api/investors/match";
 
@@ -32,6 +35,11 @@ public class ExternalApiService {
                 });
 
         return response.getBody();
+    }
+
+    private List<String> getInvestorEmailsFallback(Long inventionId, List<String> aoi, String paymentPackage,
+            Exception ex) {
+        return new ArrayList<>();
     }
 
     public String sendNotifications(List<String> emails, Long inventionId, String productDescription,
