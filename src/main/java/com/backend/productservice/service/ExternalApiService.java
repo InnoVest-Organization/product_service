@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import org.springframework.messaging.support.MessageBuilder;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.internals.RecordHeader;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +53,11 @@ public class ExternalApiService {
 
         NewBidEvent newbid = new NewBidEvent(emails, inventionId, productDescription, bidStartDate, bidStartTime,
                 bidEndTime);
-        kafkaTemplate.send("new-bid", newbid);
+        ProducerRecord<String, NewBidEvent> record = new ProducerRecord<>("new-bid", newbid);
+        record.headers().add(new RecordHeader("type", "newBid".getBytes()));
+
+        kafkaTemplate.send(record);
+
         System.out.println("Sent the message");
         // String notificationServiceUrl =
         // "http://localhost:5005/api/notifications/newbid";
