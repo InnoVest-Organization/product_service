@@ -94,5 +94,18 @@ public class InventionService {
                 innovatorEmail,
                 invention.getPaymentPackage().name());
     }
+    
+    public boolean updateInvestor(Long inventionId, Long investorId) {
+        Optional<Invention> inventionOpt = inventionRepository.findById(inventionId);
+        
+        if (inventionOpt.isPresent()) {
+            Invention invention = inventionOpt.get();
+            invention.setInvestorId(investorId);
+            inventionRepository.save(invention);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

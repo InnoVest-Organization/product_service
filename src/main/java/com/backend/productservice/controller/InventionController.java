@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/inventions")
 @RequiredArgsConstructor
@@ -49,5 +51,31 @@ public class InventionController {
     @GetMapping("/innovator-details/{inventionId}")
     public ResponseEntity<InnovatorDetailsResponse> getInnovatorDetails(@PathVariable Long inventionId) {
         return ResponseEntity.ok(inventionService.getInnovatorDetails(inventionId));
+    }
+
+
+    @PatchMapping("/{inventionId}/update-investor")
+    public ResponseEntity<String> updateInvestor(
+            @PathVariable Long inventionId,
+            @RequestParam(required = false) Long investorId,
+            @RequestBody(required = false) Map<String, Long> requestBody) {
+        
+        // Get investorId either from request param or request body
+        Long finalInvestorId = investorId;
+        if (finalInvestorId == null && requestBody != null && requestBody.containsKey("investorId")) {
+            finalInvestorId = requestBody.get("investorId");
+        }
+        
+        if (finalInvestorId == null) {
+            return ResponseEntity.badRequest().body("InvestorId is required!");
+        }
+        
+        boolean isUpdated = inventionService.updateInvestor(inventionId, finalInvestorId);
+        
+        if (isUpdated) {
+            return ResponseEntity.ok("Investor updated successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invention ID not found!");
+        }
     }
 }
