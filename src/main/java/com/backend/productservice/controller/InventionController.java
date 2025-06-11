@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -77,5 +78,11 @@ public class InventionController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invention ID not found!");
         }
+    }
+
+    @GetMapping("/inventor/{inventorId}")
+    public ResponseEntity<List<Invention>> getInventionsByInventorId(@PathVariable Long inventorId) {
+        List<Invention> inventions = inventionService.getInventionsByInventorId(inventorId);
+        return ResponseEntity.ok(inventions);
     }
 }

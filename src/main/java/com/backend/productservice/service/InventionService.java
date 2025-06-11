@@ -1,7 +1,6 @@
 package com.backend.productservice.service;
 
 import com.backend.productservice.dto.InventionRequest;
-
 import com.backend.productservice.dto.InnovatorDetailsResponse;
 import com.backend.productservice.entity.Invention;
 import com.backend.productservice.repository.InventionRepository;
@@ -106,6 +105,10 @@ public class InventionService {
         } else {
             return false;
         }
+    }
+
+    public List<Invention> getInventionsByInventorId(Long inventorId) {
+        return inventionRepository.findByInventorId(inventorId);
     }
 
 }
