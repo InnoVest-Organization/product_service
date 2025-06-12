@@ -17,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/inventions")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"}) // Add this line
 public class InventionController {
 
     private final InventionService inventionService;
