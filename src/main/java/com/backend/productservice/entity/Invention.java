@@ -19,12 +19,13 @@ import java.util.List;
 public class Invention {
 
     @Id
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inventionId;
 
     @Column(nullable = false)
     private Long inventorId;
 
+    @Column(nullable = true)
     private Long investorId;
 
     private String productVideo;
