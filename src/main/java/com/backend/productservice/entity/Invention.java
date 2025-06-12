@@ -25,7 +25,6 @@ public class Invention {
     @Column(nullable = false)
     private Long inventorId;
 
-    @Column(nullable = false)
     private Long investorId;
 
     private String productVideo;
