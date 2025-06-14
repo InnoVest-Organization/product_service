@@ -2,6 +2,7 @@ package com.backend.productservice.controller;
 
 import com.backend.productservice.dto.InventionRequest;
 import com.backend.productservice.dto.BidTimeUpdateRequest;
+import com.backend.productservice.dto.BidSelectionRequest;
 import com.backend.productservice.dto.InnovatorDetailsResponse;
 import com.backend.productservice.entity.Invention;
 import com.backend.productservice.service.InventionService;
@@ -56,34 +57,23 @@ public class InventionController {
     }
 
 
-    @PatchMapping("/{inventionId}/update-investor")
-    public ResponseEntity<String> updateInvestor(
-            @PathVariable Long inventionId,
-            @RequestParam(required = false) Long investorId,
-            @RequestBody(required = false) Map<String, Long> requestBody) {
-        
-        // Get investorId either from request param or request body
-        Long finalInvestorId = investorId;
-        if (finalInvestorId == null && requestBody != null && requestBody.containsKey("investorId")) {
-            finalInvestorId = requestBody.get("investorId");
-        }
-        
-        if (finalInvestorId == null) {
-            return ResponseEntity.badRequest().body("InvestorId is required!");
-        }
-        
-        boolean isUpdated = inventionService.updateInvestor(inventionId, finalInvestorId);
-        
-        if (isUpdated) {
-            return ResponseEntity.ok("Investor updated successfully!");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invention ID not found!");
-        }
-    }
-
     @GetMapping("/inventor/{inventorId}")
     public ResponseEntity<List<Invention>> getInventionsByInventorId(@PathVariable Long inventorId) {
         List<Invention> inventions = inventionService.getInventionsByInventorId(inventorId);
         return ResponseEntity.ok(inventions);
+    }
+    
+    @PatchMapping("/bidSelected")
+    public ResponseEntity<String> updateBidSelection(@RequestBody BidSelectionRequest request) {
+        boolean isUpdated = inventionService.selectBid(
+                request.getInventionId(),
+                request.getInvestorId(),
+                request.getIsLive());
+
+        if (isUpdated) {
+            return ResponseEntity.ok("Bid selection updated successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invention ID not found!");
+        }
     }
 }

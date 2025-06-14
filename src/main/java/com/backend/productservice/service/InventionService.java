@@ -93,13 +93,14 @@ public class InventionService {
                 innovatorEmail,
                 invention.getPaymentPackage().name());
     }
-    
-    public boolean updateInvestor(Long inventionId, Long investorId) {
-        Optional<Invention> inventionOpt = inventionRepository.findById(inventionId);
-        
+
+    public boolean selectBid(Long inventionId, Long investorId, Boolean isLive) {
+        Optional<Invention> inventionOpt = inventionRepository.findByInventionId(inventionId);
+
         if (inventionOpt.isPresent()) {
             Invention invention = inventionOpt.get();
             invention.setInvestorId(investorId);
+            invention.setIsLive(isLive);
             inventionRepository.save(invention);
             return true;
         } else {
@@ -110,5 +111,5 @@ public class InventionService {
     public List<Invention> getInventionsByInventorId(Long inventorId) {
         return inventionRepository.findByInventorId(inventorId);
     }
-
+    
 }
