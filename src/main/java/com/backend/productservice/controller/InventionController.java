@@ -63,7 +63,7 @@ public class InventionController {
         return ResponseEntity.ok(inventions);
     }
     
-    @PatchMapping("/bidSelected")
+    @PostMapping("/bidSelected")
     public ResponseEntity<String> updateBidSelection(@RequestBody BidSelectionRequest request) {
         boolean isUpdated = inventionService.selectBid(
                 request.getInventionId(),

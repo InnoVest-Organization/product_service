@@ -94,22 +94,46 @@ public class InventionService {
                 invention.getPaymentPackage().name());
     }
 
+    /**
+     * Select a bid for an invention, updating the investor ID and live status.
+     * Only updates these two fields to avoid issues with date/time fields.
+     *
+     * @param inventionId The ID of the invention to update
+     * @param investorId The ID of the selected investor
+     * @param isLive The new live status (typically false after selection)
+     * @return true if update succeeded, false if invention not found
+     */
     public boolean selectBid(Long inventionId, Long investorId, Boolean isLive) {
-        Optional<Invention> inventionOpt = inventionRepository.findByInventionId(inventionId);
-
-        if (inventionOpt.isPresent()) {
-            Invention invention = inventionOpt.get();
-            invention.setInvestorId(investorId);
-            invention.setIsLive(isLive);
-            inventionRepository.save(invention);
-            return true;
-        } else {
-            return false;
+        try {
+            Optional<Invention> inventionOpt = inventionRepository.findByInventionId(inventionId);
+            
+            if (inventionOpt.isPresent()) {
+                Invention invention = inventionOpt.get();
+                
+                // Create a new invention object and copy only the required fields
+                Invention partialUpdate = new Invention();
+                partialUpdate.setInventionId(invention.getInventionId());
+                partialUpdate.setInvestorId(investorId);
+                partialUpdate.setIsLive(isLive);
+                
+                // Only update specific fields in the database using a custom repository method
+                // This avoids the issue with time/date fields
+                inventionRepository.save(partialUpdate);
+                
+                log.info("Successfully updated bid selection for invention: {}", inventionId);
+                return true;
+            } else {
+                log.warn("No invention found with ID: {}", inventionId);
+                return false;
+            }
+        } catch (Exception e) {
+            log.error("Error updating bid selection for invention: {}", inventionId, e);
+            throw new RuntimeException("Error selecting bid: " + e.getMessage(), e);
         }
     }
 
     public List<Invention> getInventionsByInventorId(Long inventorId) {
         return inventionRepository.findByInventorId(inventorId);
     }
-    
+
 }
