@@ -105,21 +105,10 @@ public class InventionService {
      */
     public boolean selectBid(Long inventionId, Long investorId, Boolean isLive) {
         try {
-            Optional<Invention> inventionOpt = inventionRepository.findByInventionId(inventionId);
+            // Using a custom query to update only specific fields (investorId and isLive)
+            int updatedRows = inventionRepository.updateInvestorAndLiveStatus(inventionId, investorId, isLive);
             
-            if (inventionOpt.isPresent()) {
-                Invention invention = inventionOpt.get();
-                
-                // Create a new invention object and copy only the required fields
-                Invention partialUpdate = new Invention();
-                partialUpdate.setInventionId(invention.getInventionId());
-                partialUpdate.setInvestorId(investorId);
-                partialUpdate.setIsLive(isLive);
-                
-                // Only update specific fields in the database using a custom repository method
-                // This avoids the issue with time/date fields
-                inventionRepository.save(partialUpdate);
-                
+            if (updatedRows > 0) {
                 log.info("Successfully updated bid selection for invention: {}", inventionId);
                 return true;
             } else {
