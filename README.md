@@ -3,6 +3,8 @@
 ## Overview
 The Product Service is a Spring Boot application that provides REST APIs for managing product inventions. It enables creating, retrieving, and updating invention data, as well as managing bid times, innovator details, and bid selection processes.
 
+![Screenshot 2025-06-17 180428.png](images/Screenshot%202025-06-17%20180428.png)
+
 ## API Endpoints
 
 ### Invention Management
